@@ -1,0 +1,5 @@
+steps:
+- name: 'gcr.io/buildpacks/builder'
+  args: ['build', '-t', '$hackathon/WaveApp_Start.py', '.']
+images:
+- 'gcr.io/$hackathon/WaveApp_Start.py'
