@@ -1,0 +1,19 @@
+FROM redhat/ubi8
+FROM python:3.11.9
+LABEL maintainer="jandu@miway.co.za"
+
+COPY dependencies.txt dependencies.txt
+RUN pip3 install -r dependencies.txt
+
+COPY . .
+CMD ["wave", "run" , "WaveApp_Start.py", "--no-reload"]
+
+EXPOSE 10101
+
+#CMD [ "nginx", "-g" , "daemon off;" ]
+
+
+
+
+
+  
