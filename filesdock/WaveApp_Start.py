@@ -38,7 +38,7 @@ async def serve(q: Q):
     else:
         print(paths)
         for path in paths:
-            local_path = await q.site.download(paths, '.')
+            local_path = await q.site.download(path, '.')
             print(f"File downloaded to: {local_path}", paths)
         
         q.page['example'] = ui.form_card(box='2 2 4 5', items=[
