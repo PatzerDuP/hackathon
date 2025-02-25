@@ -36,6 +36,7 @@ async def serve(q: Q):
     ])
 
     ### Try to connect to the MySQL server, quite important
+    print("Connecting to MySQL server")
     conn = mysql.connector.connect(
             host='earnest-vine-451607-f1:us-central1:hackathon-run-one',
             user='patzer',
@@ -43,7 +44,7 @@ async def serve(q: Q):
             database='hackathon'
         )
     cursor = conn.cursor()
-    print(cursor)
+    print(conn.is_connected())
 
     
     q.page['headerM'] = ui.header_card(
