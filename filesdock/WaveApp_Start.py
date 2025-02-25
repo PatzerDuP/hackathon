@@ -1,5 +1,8 @@
 # We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
+import csv
+import mysql.connector
+
 
 
 # Get feedback when app is started and stopped
@@ -33,7 +36,14 @@ async def serve(q: Q):
     ])
 
     ### Try to connect to the MySQL server, quite important
-    
+    conn = mysql.connector.connect(
+            host='earnest-vine-451607-f1:us-central1:hackathon-run-one',
+            user='patzer',
+            password='patzer-forever',
+            database='hackathon'
+        )
+    cursor = conn.cursor()
+    print(cursor)
 
     
     q.page['headerM'] = ui.header_card(
