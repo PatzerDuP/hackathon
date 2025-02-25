@@ -2,7 +2,7 @@
 from h2o_wave import main, app, Q, ui 
 import csv
 import mysql.connector
-import google.cloud.sql.connector import Connector
+from google.cloud.sql.connector import Connector
 
 
 
