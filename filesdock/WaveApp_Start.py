@@ -38,7 +38,7 @@ async def serve(q: Q):
     ### Try to connect to the MySQL server, quite important
     print("Connecting to MySQL server")
     conn = mysql.connector.connect(
-            host='hackathon-run-one',
+            host='earnest-vine-451607-f1:us-central1:hackathon-run-one',
             user='patzer',
             password='patzer-forever',
             database='hackathon'
