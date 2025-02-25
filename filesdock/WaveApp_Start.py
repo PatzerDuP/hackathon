@@ -20,7 +20,9 @@ def on_shutdown():
 async def serve(q: Q):
 
     conn = mysql.connector.connect(
-        host="earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
+
+        host='34.41.77.17'
+        #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
         #user="mysql",
         user="patzer",
         password="patzer-forever",
