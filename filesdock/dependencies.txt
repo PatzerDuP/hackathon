@@ -1,7 +1,5 @@
 h2o_wave
 
-#csv
-
 mysql-connector-python
 
-cloud-sql-python-connector
+google-cloud-sql-connector
