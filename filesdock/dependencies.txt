@@ -3,3 +3,5 @@ h2o_wave
 #csv
 
 mysql.connector
+
+google.cloud.sql.connector

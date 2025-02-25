@@ -2,6 +2,7 @@
 from h2o_wave import main, app, Q, ui 
 import csv
 import mysql.connector
+import google.cloud.sql.connector import Connector
 
 
 
@@ -36,13 +37,24 @@ async def serve(q: Q):
     ])
 
     ### Try to connect to the MySQL server, quite important
-    print("Connecting to MySQL server")
-    conn = mysql.connector.connect(
-            host='earnest-vine-451607-f1:us-central1:hackathon-run-one',
-            user='patzer',
-            password='patzer-forever',
-            database='hackathon'
-        )
+    # print("Connecting to MySQL server")
+    # conn = mysql.connector.connect(
+    #         host='earnest-vine-451607-f1:us-central1:hackathon-run-one',
+    #         user='patzer',
+    #         password='patzer-forever',
+    #         database='hackathon'
+    #     )
+    # cursor = conn.cursor()
+    # print(conn.is_connected())
+
+    connector = Connector()
+    conn = connector.connect(
+        "your-project-id:us-central1:your-instance-id",  # Instance connection name
+        "mysql",
+        user="patzer",
+        password="patzer-forever",
+        db="hackathon"
+    )
     cursor = conn.cursor()
     print(conn.is_connected())
 
