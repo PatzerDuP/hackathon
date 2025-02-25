@@ -1,6 +1,6 @@
 # We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
-import mysql.connector
+#import mysql.connector
 import pymysql
 import sqlalchemy
 from google.cloud.sql.connector import Connector, IPTypes
@@ -16,8 +16,6 @@ def on_shutdown():
 # Will find the app at localhost:10101/hackathon
 @app('/hackathon', mode='unicast', on_startup=on_startup, on_shutdown=on_shutdown) # Also look into 'multicast' to sync for one user
 # https://wave.h2o.ai/docs/realtime
-
-#connector = Connector()
 
 def connect_with_connector() -> sqlalchemy.engine.base.Engine:
     instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
@@ -48,32 +46,7 @@ def connect_with_connector() -> sqlalchemy.engine.base.Engine:
 
 
 # Async functions start here
-
-
-
-
-
 async def serve(q: Q):
-    # try:
-    #     conn = mysql.connector.connect(
-
-    #         host='34.41.77.17',
-    #         #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
-    #         #user="mysql",
-    #         user="patzer",
-    #         password="patzer-forever",
-    #         db="hackathon"
-    #     )
-    #     cursor = conn.cursor()
-    #     if conn.is_connected():
-    #         print("Connection successful")
-    #     else:
-    #         print("Connection failed")
-
-    #     conn.close()
-    # except mysql.connector.Error as err:
-    #     print(f"Error: {err}")
-
 
     # Declare the layout of the page beforehand
     q.page['meta'] = ui.meta_card(box='', layouts=[
@@ -126,3 +99,24 @@ async def serve(q: Q):
 
     # Save this page to update the server side    
     await q.page.save()
+
+
+        # try:
+    #     conn = mysql.connector.connect(
+
+    #         host='34.41.77.17',
+    #         #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
+    #         #user="mysql",
+    #         user="patzer",
+    #         password="patzer-forever",
+    #         db="hackathon"
+    #     )
+    #     cursor = conn.cursor()
+    #     if conn.is_connected():
+    #         print("Connection successful")
+    #     else:
+    #         print("Connection failed")
+
+    #     conn.close()
+    # except mysql.connector.Error as err:
+    #     print(f"Error: {err}")
