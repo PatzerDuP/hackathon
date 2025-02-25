@@ -18,25 +18,27 @@ def on_shutdown():
 #connector = Connector()
 # Async functions start here
 async def serve(q: Q):
+    try:
+        conn = mysql.connector.connect(
 
-    conn = mysql.connector.connect(
+            host='34.41.77.17',
+            #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
+            #user="mysql",
+            user="patzer",
+            password="patzer-forever",
+            database="hackathon"
+        )
+        cursor = conn.cursor()
+        if conn.is_connected():
+            print("Connection successful")
+        else:
+            print("Connection failed")
 
-        host='34.41.77.17',
-        #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
-        #user="mysql",
-        user="patzer",
-        password="patzer-forever",
-        database="hackathon"
-    )
-    cursor = conn.cursor()
+        conn.close()
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
 
 
-    if conn.is_connected():
-        print("Connection successful")
-    else:
-        print("Connection failed")
-
-    conn.close()
     # Declare the layout of the page beforehand
     q.page['meta'] = ui.meta_card(box='', layouts=[
         ui.layout(
