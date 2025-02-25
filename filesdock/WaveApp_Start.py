@@ -15,9 +15,19 @@ def on_shutdown():
 @app('/hackathon', mode='unicast', on_startup=on_startup, on_shutdown=on_shutdown) # Also look into 'multicast' to sync for one user
 # https://wave.h2o.ai/docs/realtime
 
-
+connector = Connector()
 # Async functions start here
 async def serve(q: Q):
+
+    conn = connector.connect(
+        "earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
+        "mysql",
+        user="patzer",
+        password="patzer-forever",
+        db="hackathon"
+    )
+    cursor = conn.cursor()
+    print(conn.is_connected())
 
     # Declare the layout of the page beforehand
     q.page['meta'] = ui.meta_card(box='', layouts=[
@@ -45,17 +55,6 @@ async def serve(q: Q):
     #     )
     # cursor = conn.cursor()
     # print(conn.is_connected())
-
-    connector = Connector()
-    conn = connector.connect(
-        "earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
-        "mysql",
-        user="patzer",
-        password="patzer-forever",
-        db="hackathon"
-    )
-    cursor = conn.cursor()
-    print(conn.is_connected())
 
     
     q.page['headerM'] = ui.header_card(
