@@ -48,7 +48,7 @@ async def serve(q: Q):
 
     connector = Connector()
     conn = connector.connect(
-        "your-project-id:us-central1:your-instance-id",  # Instance connection name
+        "earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
         "mysql",
         user="patzer",
         password="patzer-forever",
