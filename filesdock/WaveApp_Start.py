@@ -1,7 +1,9 @@
 # We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
 import mysql.connector
-from google.cloud.sql.connector import Connector
+import pymysql
+import sqlalchemy
+from google.cloud.sql.connector import Connector, IPTypes
 
 
 
@@ -26,7 +28,7 @@ async def serve(q: Q):
             #user="mysql",
             user="patzer",
             password="patzer-forever",
-            database="hackathon"
+            db="hackathon"
         )
         cursor = conn.cursor()
         if conn.is_connected():
