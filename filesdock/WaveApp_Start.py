@@ -32,6 +32,9 @@ async def serve(q: Q):
         )
     ])
 
+    ### Try to connect to the MySQL server, quite important
+    
+
     
     q.page['headerM'] = ui.header_card(
         box=ui.box('header'),
