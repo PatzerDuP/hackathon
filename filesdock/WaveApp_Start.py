@@ -1,6 +1,5 @@
 # We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
-import csv
 import mysql.connector
 from google.cloud.sql.connector import Connector
 
