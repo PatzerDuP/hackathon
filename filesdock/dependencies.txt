@@ -2,4 +2,4 @@ h2o_wave
 
 mysql-connector-python
 
-google-cloud-sql-connector
+cloud-sql-python-connector
