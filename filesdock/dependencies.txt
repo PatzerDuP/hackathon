@@ -2,8 +2,6 @@ h2o_wave
 
 mysql-connector-python
 
-os
-
 cloud-sql-python-connector
 
 sqlalchemy
