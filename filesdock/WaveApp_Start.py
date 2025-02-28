@@ -1,11 +1,12 @@
 # We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
-#import mysql.connector
+import mysql.connector
 import pymysql
 import sqlalchemy
 from google.cloud.sql.connector import Connector, IPTypes
-
-
+from google.auth import compute_engine
+from google.auth.transport.requests import Request
+import os
 
 # Get feedback when app is started and stopped
 def on_startup():
@@ -16,6 +17,36 @@ def on_shutdown():
 # Will find the app at localhost:10101/hackathon
 @app('/hackathon', mode='unicast', on_startup=on_startup, on_shutdown=on_shutdown) # Also look into 'multicast' to sync for one user
 # https://wave.h2o.ai/docs/realtime
+
+
+
+
+def get_db_connection():
+    # Replace with your Cloud SQL instance connection name
+    cloud_sql_connection_name = 'earnest-vine-451607-f1:us-central1:hackathon-run-one'
+    # Connect using the Cloud SQL socket
+    connection = mysql.connector.connect(
+        user='patzer',  # Your MySQL username
+        password='patzer-forever',  # Your MySQL password
+        host='/cloudsql/{}'.format(cloud_sql_connection_name),  # Cloud SQL Unix socket
+        database='hackathon',  # Database you want to connect to
+    )
+    
+    return connection
+
+# Example: Function to query data from the DB
+def fetch_data():
+    connection = get_db_connection()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM prem_upload")
+    results = cursor.fetchall()
+    cursor.close()
+    connection.close()
+    
+    return results
+
+
+
 
 # def connect_with_connector() -> sqlalchemy.engine.base.Engine:
 #     instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
