@@ -8,7 +8,7 @@ host = '34.41.77.17'
 database = 'hackathon'
 
 # Function to test database connection (no async needed)
-def test_db_connection():
+def test_db_connection(q):
     try:
         connection = mysql.connector.connect(
             user=user,
@@ -40,7 +40,7 @@ async def serve(q: Q):
         ]
     )
     # Test database connection (this is synchronous code)
-    db_connection_status = test_db_connection()
+    db_connection_status = test_db_connection(Q)
     
     # Display the connection status on the screen
     q.page['db_status'] = ui.form_card(
