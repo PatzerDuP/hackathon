@@ -7,7 +7,7 @@ password = 'patzer-forever'
 host = '34.41.77.17'
 database = 'hackathon'
 
-# Function to test database connection
+# Function to test database connection (no async needed)
 def test_db_connection():
     try:
         connection = mysql.connector.connect(
@@ -32,8 +32,8 @@ def test_db_connection():
 
 # Main app function to display the connection status
 @app('/hackathon')
-def serve(q: Q):
-    # Test database connection
+async def serve(q: Q):
+    # Test database connection (this is synchronous code)
     db_connection_status = test_db_connection()
     
     # Display the connection status on the screen
@@ -45,4 +45,4 @@ def serve(q: Q):
     )
     
     # Save the page
-    return q.page
+    await q.page.save()
