@@ -1,14 +1,25 @@
-from h2o_wave import site, ui
+from h2o_wave import main, app, Q, ui
+import mysql.connector
 
-# Grab a reference to a page
-page = site['/hackathon']
+# Database credentials
+user = 'patzer'
+password = 'patzer-forever'
+host = '34.41.77.17'
+database = 'hackathon'
 
-# Modify the page by adding a card
-page['greeting'] = ui.markdown_card(
-    box='1 1 2 2',
-    title='Hello!',
-    content='Welcome to H2O Wave!'
-)
 
-# Save the page
-page.save()
+
+# Main app function to display the connection status
+@app('/hackathon')
+async def serve(q: Q):
+    q.page['db_status'] = ui.form_card(
+        box=ui.box('content'),
+        items=[
+            ui.text_xl(f"Database Connection Status: NONE"),
+        ]
+    )
+ 
+    
+    
+    # Save the page
+    await q.page.save()
