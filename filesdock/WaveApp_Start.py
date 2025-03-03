@@ -19,16 +19,14 @@ def on_shutdown():
 # https://wave.h2o.ai/docs/realtime
 
 
-
-
 async def get_db_connection(q):
     # Replace with your Cloud SQL instance connection name
-    cloud_sql_connection_name = 'earnest-vine-451607-f1:us-central1:hackathon-run-one'
+    #cloud_sql_connection_name = 'earnest-vine-451607-f1:us-central1:hackathon-run-one'
     # Connect using the Cloud SQL socket
     connection = mysql.connector.connect(
         user='patzer',  # Your MySQL username
         password='patzer-forever',  # Your MySQL password
-        host = '34.41.77.17', #host='/cloudsql/{}'.format(cloud_sql_connection_name),  # Cloud SQL Unix socket
+        host = '10.67.32.3', #host='/cloudsql/{}'.format(cloud_sql_connection_name),  # Cloud SQL Unix socket
         database='hackathon',  # Database you want to connect to
     )
     
@@ -53,9 +51,6 @@ async def test_db_connection(q):
             return "Connection failed: No result returned."
     except mysql.connector.Error as err:
         return f"Connection failed: {err}"
-
-
-
 
 
 
