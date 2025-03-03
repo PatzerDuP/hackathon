@@ -34,6 +34,31 @@ def get_db_connection():
     
     return connection
 
+#### Testign hopefully remove later
+def test_db_connection():
+    try:
+        # Try to get the connection
+        connection = get_db_connection()
+        # Create a cursor to run a test query (optional)
+        cursor = connection.cursor()
+        cursor.execute("SELECT 1")  # Simple query to check the connection
+        result = cursor.fetchone()
+        cursor.close()
+        connection.close()
+        
+        # If the result is as expected, return success
+        if result:
+            return "Connection successful!"
+        else:
+            return "Connection failed: No result returned."
+    except mysql.connector.Error as err:
+        return f"Connection failed: {err}"
+
+
+
+
+
+
 # Example: Function to query data from the DB
 def fetch_data():
     connection = get_db_connection()
@@ -44,36 +69,6 @@ def fetch_data():
     connection.close()
     
     return results
-
-
-
-
-# def connect_with_connector() -> sqlalchemy.engine.base.Engine:
-#     instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
-#     db_user="patzer",
-#     db_pass="patzer-forever",
-#     db_name="hackathon"
-
-#     ip_type = IPTypes.PRIVATE
-
-#     connector = Connector(ip_type=ip_type, refresh_strategy="LAZY")
-
-#     def getconn() -> pymysql.connections.Connection:
-#         conn: pymysql.connections.Connection = connector.connect(
-#             instance_connection_name,
-#             "pymysql",
-#             user=db_user,
-#             password=db_pass,
-#             db=db_name,
-#         )
-#         return conn
-
-#     pool = sqlalchemy.create_engine(
-#         "mysql+pymysql://",
-#         creator=getconn,
-#         # ...
-#     )
-#     return pool
 
 
 # Async functions start here
@@ -127,6 +122,21 @@ async def serve(q: Q):
             ui.text_xl(f"File downloaded successfully: {local_path}"),
             ui.button(name='upload_another', label='Upload another file', primary=True)
         ])
+
+
+
+
+    db_connection_status = test_db_connection()
+    print("Database Connection Status:", db_connection_status)  # Log to the console for server-side debugging
+    
+    # Display the connection status in the app
+    q.page['db_status'] = ui.form_card(
+        box=ui.box('content'),
+        items=[
+            ui.text_xl(f"Database Connection Status: {db_connection_status}"),
+        ]
+    )
+
 
     # Save this page to update the server side    
     await q.page.save()
