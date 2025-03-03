@@ -126,7 +126,7 @@ async def serve(q: Q):
 
 
 
-    db_connection_status = test_db_connection()
+    db_connection_status = await test_db_connection()
     print("Database Connection Status:", db_connection_status)  # Log to the console for server-side debugging
     
     # Display the connection status in the app
