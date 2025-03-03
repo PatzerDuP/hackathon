@@ -20,9 +20,7 @@ def connect_with_connector() -> sqlalchemy.engine.base.Engine:
     # Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
     # keep secrets safe.
 
-    instance_connection_name = os.environ[
-        "earnest-vine-451607-f1:us-central1:hackathon-run-one"
-    ]  # e.g. 'project:region:instance'
+    instance_connection_name = "earnest-vine-451607-f1:us-central1:hackathon-run-one"
     db_user = "patzer"  # e.g. 'my-db-user'
     db_pass = "patzer-forever" # e.g. 'my-db-password'
     db_name = "hackathon"  # e.g. 'my-database'
