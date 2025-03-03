@@ -21,7 +21,7 @@ def on_shutdown():
 
 
 
-def get_db_connection():
+async def get_db_connection(q):
     # Replace with your Cloud SQL instance connection name
     cloud_sql_connection_name = 'earnest-vine-451607-f1:us-central1:hackathon-run-one'
     # Connect using the Cloud SQL socket
@@ -35,7 +35,7 @@ def get_db_connection():
     return connection
 
 #### Testign hopefully remove later
-def test_db_connection():
+async def test_db_connection(q):
     try:
         # Try to get the connection
         connection = get_db_connection()
@@ -60,7 +60,7 @@ def test_db_connection():
 
 
 # Example: Function to query data from the DB
-def fetch_data():
+async def fetch_data(q):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
     cursor.execute("SELECT * FROM prem_upload")
