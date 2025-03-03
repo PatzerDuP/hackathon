@@ -8,7 +8,7 @@ host = '34.41.77.17'
 database = 'hackathon'
 
 # Function to test database connection (no async needed)
-async def test_db_connection(q=Q):
+async def test_db_connection(q: Q):
     try:
         connection = mysql.connector.connect(
             user=user,
