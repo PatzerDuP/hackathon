@@ -2,9 +2,9 @@ h2o_wave
 
 mysql-connector-python
 
-cloud-sql-python-connector["pymysql"]
+cloud-sql-python-connector
 
-SQLAlchemy==2.0.7
+SQLAlchemy
 
 pymysql
 
