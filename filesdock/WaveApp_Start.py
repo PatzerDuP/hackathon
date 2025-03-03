@@ -28,7 +28,7 @@ async def get_db_connection(q):
     connection = mysql.connector.connect(
         user='patzer',  # Your MySQL username
         password='patzer-forever',  # Your MySQL password
-        host='/cloudsql/{}'.format(cloud_sql_connection_name),  # Cloud SQL Unix socket
+        host = '34.41.77.17', #host='/cloudsql/{}'.format(cloud_sql_connection_name),  # Cloud SQL Unix socket
         database='hackathon',  # Database you want to connect to
     )
     
