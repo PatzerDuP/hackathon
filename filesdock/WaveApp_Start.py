@@ -1,74 +1,116 @@
 from h2o_wave import main, app, Q, ui
-import mysql.connector
+#import mysql.connector
 
+from google.cloud.sql.connector import Connector, IPTypes
+import pymysql
 
-
-# Database credentials
-user = 'patzer'
-password = 'patzer-forever'
-host = '34.41.77.17'
-database = 'hackathon'
-
-
-
-from google.cloud.sql.connector import Connector
 import sqlalchemy
 
-# initialize Connector object
-connector = Connector()
 
-# function to return the database connection object
-def getconn():
-    conn = connector.connect(
-        'earnest-vine-451607-f1:us-central1:hackathon-run-one',
-        "pymysql",
-        user=user,
-        password=password,
-        db=database
+
+
+def connect_with_connector() -> sqlalchemy.engine.base.Engine:
+    """
+    Initializes a connection pool for a Cloud SQL instance of MySQL.
+
+    Uses the Cloud SQL Python Connector package.
+    """
+    # Note: Saving credentials in environment variables is convenient, but not
+    # secure - consider a more secure solution such as
+    # Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
+    # keep secrets safe.
+
+    instance_connection_name = os.environ[
+        "earnest-vine-451607-f1:us-central1:hackathon-run-one"
+    ]  # e.g. 'project:region:instance'
+    db_user = "patzer"  # e.g. 'my-db-user'
+    db_pass = "patzer-forever" # e.g. 'my-db-password'
+    db_name = "hackathon"  # e.g. 'my-database'
+
+    ip_type = IPTypes.PRIVATE
+
+    # initialize Cloud SQL Python Connector object
+    connector = Connector(ip_type=ip_type, refresh_strategy="LAZY")
+
+    def getconn() -> pymysql.connections.Connection:
+        conn: pymysql.connections.Connection = connector.connect(
+            instance_connection_name,
+            "pymysql",
+            user=db_user,
+            password=db_pass,
+            db=db_name,
+        )
+        return conn
+
+    pool = sqlalchemy.create_engine(
+        "mysql+pymysql://",
+        creator=getconn,
+        # ...
     )
-    return conn
+    return pool
 
-# create connection pool with 'creator' argument to our connection object function
-pool = sqlalchemy.create_engine(
-    "mysql+pymysql://",
-    creator=getconn,
-)
+# Database credentials
+# user = 'patzer'
+# password = 'patzer-forever'
+# host = '34.41.77.17'
+# database = 'hackathon'
 
-with pool.connect() as db_conn:
-  # create ratings table in our sandwiches database
-  db_conn.execute(
-    sqlalchemy.text(
-      "CREATE TABLE IF NOT EXISTS ratings "
-      "( id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, "
-      "origin VARCHAR(255) NOT NULL, rating FLOAT NOT NULL, "
-      "PRIMARY KEY (id));"
-    )
-  )
 
-  # commit transaction (SQLAlchemy v2.X.X is commit as you go)
-  db_conn.commit()
+# # initialize Connector object
+# connector = Connector()
 
-  # insert data into our ratings table
-  insert_stmt = sqlalchemy.text(
-      "INSERT INTO ratings (name, origin, rating) VALUES (:name, :origin, :rating)",
-  )
+# # function to return the database connection object
+# def getconn():
+#     conn = connector.connect(
+#         'earnest-vine-451607-f1:us-central1:hackathon-run-one',
+#         "pymysql",
+#         user=user,
+#         password=password,
+#         db=database
+#     )
+#     return conn
 
-  # insert entries into table
-  db_conn.execute(insert_stmt, parameters={"name": "HOTDOG", "origin": "Germany", "rating": 7.5})
-  db_conn.execute(insert_stmt, parameters={"name": "BÀNH MÌ", "origin": "Vietnam", "rating": 9.1})
-  db_conn.execute(insert_stmt, parameters={"name": "CROQUE MADAME", "origin": "France", "rating": 8.3})
+# # create connection pool with 'creator' argument to our connection object function
+# pool = sqlalchemy.create_engine(
+#     "mysql+pymysql://",
+#     creator=getconn,
+# )
 
-  # commit transactions
-  db_conn.commit()
+# with pool.connect() as db_conn:
+#   # create ratings table in our sandwiches database
+#   db_conn.execute(
+#     sqlalchemy.text(
+#       "CREATE TABLE IF NOT EXISTS ratings "
+#       "( id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, "
+#       "origin VARCHAR(255) NOT NULL, rating FLOAT NOT NULL, "
+#       "PRIMARY KEY (id));"
+#     )
+#   )
 
-  # query and fetch ratings table
-  results = db_conn.execute(sqlalchemy.text("SELECT * FROM ratings")).fetchall()
+#   # commit transaction (SQLAlchemy v2.X.X is commit as you go)
+#   db_conn.commit()
 
-  # show results
-  for row in results:
-    print(row)
+#   # insert data into our ratings table
+#   insert_stmt = sqlalchemy.text(
+#       "INSERT INTO ratings (name, origin, rating) VALUES (:name, :origin, :rating)",
+#   )
 
-connector.close()
+#   # insert entries into table
+#   db_conn.execute(insert_stmt, parameters={"name": "HOTDOG", "origin": "Germany", "rating": 7.5})
+#   db_conn.execute(insert_stmt, parameters={"name": "BÀNH MÌ", "origin": "Vietnam", "rating": 9.1})
+#   db_conn.execute(insert_stmt, parameters={"name": "CROQUE MADAME", "origin": "France", "rating": 8.3})
+
+#   # commit transactions
+#   db_conn.commit()
+
+#   # query and fetch ratings table
+#   results = db_conn.execute(sqlalchemy.text("SELECT * FROM ratings")).fetchall()
+
+#   # show results
+#   for row in results:
+#     print(row)
+
+# connector.close()
 
 
 
