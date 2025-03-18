@@ -73,14 +73,20 @@ async def serve(q: Q):
         ])
 
     data = fetch_data_from_db()
+    print(data)
     q.page['readSQL'] = ui.form_card(
         box=ui.box('second_box'), 
         items=[
             ui.text_xl('Reading from SQL'),
             ui.Table(
                 name='premium_table',
-                columns=['Info', 'Premium'],  # Replace with your actual column names
-                rows=[[str(item) for item in row] for row in data]  # Convert each row to a list of strings
+                columns=[
+                    ui.table_column(name='info', label='Info', sortable=True),
+                    ui.table_column(name='premium', label='Premium', sortable=True),
+                ],
+                #columns=['Info', 'Premium'],  # Replace with your actual column names
+                #rows=[[str(item) for item in row] for row in data]  # Convert each row to a list of strings
+                rows=[ui.table_row(name=str(index), cells=[str(item) for item in row]) for index, row in enumerate(data)]  # Convert each row to a list of strings
             )
     ])
     # Save this page to update the server side    
