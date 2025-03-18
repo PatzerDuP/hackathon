@@ -78,6 +78,7 @@ async def serve(q: Q):
         items=[
             ui.text_xl('Reading from SQL'),
             ui.Table(
+                name='premium_table',
                 columns=['Info', 'Premium'],  # Replace with your actual column names
                 rows=[[str(item) for item in row] for row in data]  # Convert each row to a list of strings
             )
