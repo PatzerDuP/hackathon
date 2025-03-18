@@ -70,7 +70,7 @@ async def serve(q: Q):
             ui.button(name='upload_another', label='Upload another file', primary=True)
         ])
 
-    q.page['readSQL'] = ui.header_card(
+    q.page['readSQL'] = ui.form_card(
         box=ui.box('second_box'), items=[
         ui.text_xl('File Upload Status'),
         ui.text('File downloaded successfully.')
