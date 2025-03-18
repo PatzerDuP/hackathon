@@ -11,3 +11,5 @@ pymysql
 psycopg2
 
 google-auth
+
+pg8000

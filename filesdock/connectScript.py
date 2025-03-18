@@ -15,7 +15,7 @@ def get_db_connection():
     connector = Connector()
     conn = connector.connect(
         INSTANCE_CONNECTION_NAME,
-        "postgresql",
+        "pg8000",
         user=DB_USER,
         password=DB_PASS,
         db=DB_NAME,
