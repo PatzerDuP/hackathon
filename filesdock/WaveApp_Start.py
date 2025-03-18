@@ -72,10 +72,21 @@ async def serve(q: Q):
             ui.button(name='upload_another', label='Upload another file', primary=True)
         ])
 
+    data = fetch_data_from_db()
     q.page['readSQL'] = ui.form_card(
         box=ui.box('second_box'), items=[
         ui.text_xl('Reading from SQL'),
-        ui.text(fetch_data_from_db())
+        ui.text()
+    ])
+
+    q.page['readSQL'] = ui.form_card(
+        box=ui.box('second_box'), 
+        items=[
+            ui.text_xl('Reading from SQL'),
+            ui.Table(
+                columns=['Info', 'Premium'],  # Replace with your actual column names
+                rows=[[str(item) for item in row] for row in data]  # Convert each row to a list of strings
+            )
     ])
     # Save this page to update the server side    
     await q.page.save()
