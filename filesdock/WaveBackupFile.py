@@ -17,32 +17,32 @@ def on_shutdown():
 @app('/hackathon', mode='unicast', on_startup=on_startup, on_shutdown=on_shutdown) # Also look into 'multicast' to sync for one user
 # https://wave.h2o.ai/docs/realtime
 
-def connect_with_connector() -> sqlalchemy.engine.base.Engine:
-    instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
-    db_user="patzer",
-    db_pass="patzer-forever",
-    db_name="hackathon"
+# def connect_with_connector() -> sqlalchemy.engine.base.Engine:
+#     instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
+#     db_user="patzer",
+#     db_pass="patzer-forever",
+#     db_name="hackathon"
 
-    ip_type = IPTypes.PRIVATE
+#     ip_type = IPTypes.PRIVATE
 
-    connector = Connector(ip_type=ip_type, refresh_strategy="LAZY")
+#     connector = Connector(ip_type=ip_type, refresh_strategy="LAZY")
 
-    def getconn() -> pymysql.connections.Connection:
-        conn: pymysql.connections.Connection = connector.connect(
-            instance_connection_name,
-            "pymysql",
-            user=db_user,
-            password=db_pass,
-            db=db_name,
-        )
-        return conn
+#     def getconn() -> pymysql.connections.Connection:
+#         conn: pymysql.connections.Connection = connector.connect(
+#             instance_connection_name,
+#             "pymysql",
+#             user=db_user,
+#             password=db_pass,
+#             db=db_name,
+#         )
+#         return conn
 
-    pool = sqlalchemy.create_engine(
-        "mysql+pymysql://",
-        creator=getconn,
-        # ...
-    )
-    return pool
+#     pool = sqlalchemy.create_engine(
+#         "mysql+pymysql://",
+#         creator=getconn,
+#         # ...
+#     )
+#     return pool
 
 
 # Async functions start here
