@@ -72,23 +72,36 @@ async def serve(q: Q):
             ui.button(name='upload_another', label='Upload another file', primary=True)
         ])
 
-    data = fetch_data_from_db()
-    print(data)
-    q.page['readSQL'] = ui.form_card(
-        box=ui.box('second_box'), 
-        items=[
-            ui.text_xl('Reading from SQL'),
-            ui.Table(
-                name='premium_table',
-                columns=[
-                    ui.table_column(name='info', label='Info', sortable=True),
-                    ui.table_column(name='premium', label='Premium', sortable=True),
-                ],
-                #columns=['Info', 'Premium'],  # Replace with your actual column names
-                #rows=[[str(item) for item in row] for row in data]  # Convert each row to a list of strings
-                rows=[ui.table_row(name=str(index), cells=[str(item) for item in row]) for index, row in enumerate(data)]  # Convert each row to a list of strings
-            )
-    ])
+
+    try:
+        data = fetch_data_from_db()
+        print(data)  # Print data for debugging
+
+        q.page['readSQL'] = ui.form_card(
+            box=ui.box('second_box'), 
+            items=[
+                ui.text_xl('Reading from SQL'),
+                ui.table(
+                    name='sql_table',  # Add the name attribute
+                    columns=[
+                        ui.table_column(name='info', label='Info', sortable=True),
+                        ui.table_column(name='premium', label='Premium', sortable=True),
+                    ],
+                    rows=[ui.table_row(name=str(index), cells=[str(item) for item in row]) for index, row in enumerate(data)]  # Convert each row to a list of strings
+                )
+            ]
+        )
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        q.page['readSQL'] = ui.form_card(
+            box=ui.box('second_box'), 
+            items=[
+                ui.text_xl('Error'),
+                ui.text(f"An error occurred: {e}")
+            ]
+        )        
+
+
     # Save this page to update the server side    
     await q.page.save()
 
