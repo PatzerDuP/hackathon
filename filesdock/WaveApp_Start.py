@@ -5,6 +5,7 @@ from google.cloud.sql.connector import Connector
 import psycopg2
 from google.auth import default
 
+from connectScript import fetch_data_from_db  # Import the function from db_connector.py
 
 
 # Get feedback when app is started and stopped
@@ -74,7 +75,7 @@ async def serve(q: Q):
     q.page['readSQL'] = ui.form_card(
         box=ui.box('second_box'), items=[
         ui.text_xl('Reading from SQL'),
-        ui.text('Here be the data')
+        ui.text(fetch_data_from_db())
     ])
     # Save this page to update the server side    
     await q.page.save()

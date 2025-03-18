@@ -35,5 +35,5 @@ def fetch_data_from_db():
     
     return data
 
-data = fetch_data_from_db()
-print(data)
+#data = fetch_data_from_db()
+#print(data)
