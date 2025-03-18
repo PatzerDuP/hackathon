@@ -74,12 +74,6 @@ async def serve(q: Q):
 
     data = fetch_data_from_db()
     q.page['readSQL'] = ui.form_card(
-        box=ui.box('second_box'), items=[
-        ui.text_xl('Reading from SQL'),
-        ui.text()
-    ])
-
-    q.page['readSQL'] = ui.form_card(
         box=ui.box('second_box'), 
         items=[
             ui.text_xl('Reading from SQL'),
