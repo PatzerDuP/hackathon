@@ -1,4 +1,3 @@
-# We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
 #import mysql.connector
 import pymysql
@@ -17,33 +16,6 @@ def on_shutdown():
 @app('/hackathon', mode='unicast', on_startup=on_startup, on_shutdown=on_shutdown) # Also look into 'multicast' to sync for one user
 # https://wave.h2o.ai/docs/realtime
 
-# def connect_with_connector() -> sqlalchemy.engine.base.Engine:
-#     instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
-#     db_user="patzer",
-#     db_pass="patzer-forever",
-#     db_name="hackathon"
-
-#     ip_type = IPTypes.PRIVATE
-
-#     connector = Connector(ip_type=ip_type, refresh_strategy="LAZY")
-
-#     def getconn() -> pymysql.connections.Connection:
-#         conn: pymysql.connections.Connection = connector.connect(
-#             instance_connection_name,
-#             "pymysql",
-#             user=db_user,
-#             password=db_pass,
-#             db=db_name,
-#         )
-#         return conn
-
-#     pool = sqlalchemy.create_engine(
-#         "mysql+pymysql://",
-#         creator=getconn,
-#         # ...
-#     )
-#     return pool
-
 
 # Async functions start here
 async def serve(q: Q):
@@ -59,6 +31,7 @@ async def serve(q: Q):
                     ui.zone('content', size='60%'),
                     ui.zone('sidebarR', size='20%'),
                 ]),
+                ui.zone('second_box'),
                 ui.zone('footer'),
             ]
         )
@@ -97,26 +70,11 @@ async def serve(q: Q):
             ui.button(name='upload_another', label='Upload another file', primary=True)
         ])
 
+    q.page['readSQL'] = ui.header_card(
+        box=ui.box('second_box'), items=[
+        ui.text_xl('File Upload Status'),
+        ui.text('File downloaded successfully.')
+    ])
     # Save this page to update the server side    
     await q.page.save()
 
-
-        # try:
-    #     conn = mysql.connector.connect(
-
-    #         host='34.41.77.17',
-    #         #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
-    #         #user="mysql",
-    #         user="patzer",
-    #         password="patzer-forever",
-    #         db="hackathon"
-    #     )
-    #     cursor = conn.cursor()
-    #     if conn.is_connected():
-    #         print("Connection successful")
-    #     else:
-    #         print("Connection failed")
-
-    #     conn.close()
-    # except mysql.connector.Error as err:
-    #     print(f"Error: {err}")

@@ -7,4 +7,3 @@ cloud-sql-python-connector
 SQLAlchemy
 
 pymysql
-
