@@ -5,7 +5,7 @@ from google.cloud.sql.connector import Connector
 import psycopg2
 from google.auth import default
 
-from connectScript import fetch_data_from_db  # Import the function from db_connector.py
+from connectScript import fetch_data_from_db, write_data_to_db  # Import the function from db_connector.py
 
 import pandas as pd
 
@@ -68,6 +68,9 @@ async def serve(q: Q):
             print(f"File downloaded to: {local_path}", paths)
             df = pd.read_csv(local_path)
             print(df)
+            data = [tuple(row) for row in df.to_numpy()]
+            write_data_to_db(data)
+            print("Data written to database hopefully")
 
         
         # Pretty interesting trick, after uploaded, we change the page, and presumably change variable when button is clicked

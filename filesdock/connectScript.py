@@ -35,5 +35,22 @@ def fetch_data_from_db():
     
     return data
 
-#data = fetch_data_from_db()
-#print(data)
+
+def write_data_to_db(data):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    insert_query = "INSERT INTO prem_upload (idnr, premium) VALUES (%s, %s)"
+
+    # Execute the insert query for each row in the data
+    for row in data:
+        cursor.execute(insert_query, row)
+
+    # Commit the transaction
+    connection.commit()
+    
+    cursor.close()
+    connection.close()
+
+    # Print end of function
+    print("Data written to database hopefully")
