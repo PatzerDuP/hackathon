@@ -6,8 +6,6 @@ cloud-sql-python-connector
 
 SQLAlchemy
 
-pymysql
-
 psycopg2
 
 google-auth

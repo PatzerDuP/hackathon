@@ -74,12 +74,11 @@ async def serve(q: Q):
                 #data = [tuple(row) for row in df.to_numpy()]
                 #write_data_to_db(data)
                 #write_chunks_to_db(local_path)
+                
+                print("Try to read csv into table")
+                load_csv_to_db(local_path)
 
-                with open(local_path, 'r') as f:
-                    csv_data = f.read()
-                    load_csv_to_db(csv_data)
-
-                print("Data written to database successfully")
+                print("Done trying")
             except Exception as e:
                 print(f"An error occurred: {e}")
         

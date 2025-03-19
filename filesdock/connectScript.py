@@ -6,6 +6,7 @@ import psycopg2
 from google.auth import default
 import csv
 import io
+import pg8000
 
 
 INSTANCE_CONNECTION_NAME = 'earnest-vine-451607-f1:us-central1:test-postgres-db' 
@@ -107,17 +108,25 @@ def write_chunks_to_db(file_path, batch_size=10000):
     print("Data written to database successfully")
 
 
-def load_csv_to_db(csv_data):
+def load_csv_to_db(file_path):
     connection = get_db_connection()
     cursor = connection.cursor()
 
     try:
+        cursor.execute("TRUNCATE TABLE prem_upload RESTART IDENTITY CASCADE;")
+        connection.commit()
+
         # Convert CSV string to file-like object
-        csv_file = io.StringIO(csv_data)
+        csv_file = io.StringIO(file_path)
         
         # Use PostgreSQL COPY command to load data into table directly
-        cursor.copy_from(csv_file, 'prem_upload', sep=',', null='\\N', columns=('idnr', 'premium'))  # Adjust column names
-        connection.commit()  # Commit the transaction
+        with open(file_path, mode='r') as file:
+            # Use the CSV module to read the file
+            csv_file = io.StringIO(file.read())  # Convert file content to file-like object for copy_from
+            
+            # Copy data from the CSV file to the PostgreSQL table
+            cursor.copy_from(csv_file, 'prem_upload', sep=',', null='\\N', columns=('idnr', 'premium'))  # Adjust column names
+        connection.commit()
         
         print("Data loaded successfully!")
     except Exception as e:
