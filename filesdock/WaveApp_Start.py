@@ -68,14 +68,16 @@ async def serve(q: Q):
                 local_path = await q.site.download(path, '.')
                 print(f"File downloaded to: {local_path}", paths)
                 
-                df = pd.read_csv(local_path)
-                print(df)
+                #df = pd.read_csv(local_path)
+                #print(df)
                 
                 #data = [tuple(row) for row in df.to_numpy()]
                 #write_data_to_db(data)
                 #write_chunks_to_db(local_path)
 
-                load_csv_to_db(df)
+                with open(local_path, 'r') as f:
+                    csv_data = f.read()
+                    load_csv_to_db(csv_data)
 
                 print("Data written to database successfully")
             except Exception as e:
