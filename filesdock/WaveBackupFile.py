@@ -1,10 +1,13 @@
-# We import these to be able to read and write
 from h2o_wave import main, app, Q, ui 
-#import mysql.connector
-import pymysql
-import sqlalchemy
-from google.cloud.sql.connector import Connector, IPTypes
 
+from google.cloud.sql.connector import Connector
+
+import psycopg2
+from google.auth import default
+
+from connectScript import fetch_data_from_db, write_data_to_db  # Import the function from db_connector.py
+
+import pandas as pd
 
 
 # Get feedback when app is started and stopped
@@ -16,33 +19,6 @@ def on_shutdown():
 # Will find the app at localhost:10101/hackathon
 @app('/hackathon', mode='unicast', on_startup=on_startup, on_shutdown=on_shutdown) # Also look into 'multicast' to sync for one user
 # https://wave.h2o.ai/docs/realtime
-
-# def connect_with_connector() -> sqlalchemy.engine.base.Engine:
-#     instance_connection_name='earnest-vine-451607-f1:us-central1:hackathon-run-one',
-#     db_user="patzer",
-#     db_pass="patzer-forever",
-#     db_name="hackathon"
-
-#     ip_type = IPTypes.PRIVATE
-
-#     connector = Connector(ip_type=ip_type, refresh_strategy="LAZY")
-
-#     def getconn() -> pymysql.connections.Connection:
-#         conn: pymysql.connections.Connection = connector.connect(
-#             instance_connection_name,
-#             "pymysql",
-#             user=db_user,
-#             password=db_pass,
-#             db=db_name,
-#         )
-#         return conn
-
-#     pool = sqlalchemy.create_engine(
-#         "mysql+pymysql://",
-#         creator=getconn,
-#         # ...
-#     )
-#     return pool
 
 
 # Async functions start here
@@ -59,6 +35,7 @@ async def serve(q: Q):
                     ui.zone('content', size='60%'),
                     ui.zone('sidebarR', size='20%'),
                 ]),
+                ui.zone('second_box'),
                 ui.zone('footer'),
             ]
         )
@@ -87,8 +64,19 @@ async def serve(q: Q):
     else:
         print(paths)
         for path in paths:
-            local_path = await q.site.download(path, '.')
-            print(f"File downloaded to: {local_path}", paths)
+            try:
+                local_path = await q.site.download(path, '.')
+                print(f"File downloaded to: {local_path}", paths)
+                
+                df = pd.read_csv(local_path)
+                print(df)
+                
+                data = [tuple(row) for row in df.to_numpy()]
+                write_data_to_db(data)
+                
+                print("Data written to database successfully")
+            except Exception as e:
+                print(f"An error occurred: {e}")
         
         # Pretty interesting trick, after uploaded, we change the page, and presumably change variable when button is clicked
         q.page['upload'] = ui.form_card(
@@ -97,26 +85,36 @@ async def serve(q: Q):
             ui.button(name='upload_another', label='Upload another file', primary=True)
         ])
 
+
+    try:
+        data = fetch_data_from_db()
+        print(data)  # Print data for debugging
+
+        q.page['readSQL'] = ui.form_card(
+            box=ui.box('second_box'), 
+            items=[
+                ui.text_xl('Reading from SQL'),
+                ui.table(
+                    name='sql_table',  # Add the name attribute
+                    columns=[
+                        ui.table_column(name='info', label='Info', sortable=True),
+                        ui.table_column(name='premium', label='Premium', sortable=True),
+                    ],
+                    rows=[ui.table_row(name=str(index), cells=[str(item) for item in row]) for index, row in enumerate(data)]  # Convert each row to a list of strings
+                )
+            ]
+        )
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        q.page['readSQL'] = ui.form_card(
+            box=ui.box('second_box'), 
+            items=[
+                ui.text_xl('Error'),
+                ui.text(f"An error occurred: {e}")
+            ]
+        )        
+
+
     # Save this page to update the server side    
     await q.page.save()
 
-
-        # try:
-    #     conn = mysql.connector.connect(
-
-    #         host='34.41.77.17',
-    #         #"earnest-vine-451607-f1:us-central1:hackathon-run-one",  # Instance connection name
-    #         #user="mysql",
-    #         user="patzer",
-    #         password="patzer-forever",
-    #         db="hackathon"
-    #     )
-    #     cursor = conn.cursor()
-    #     if conn.is_connected():
-    #         print("Connection successful")
-    #     else:
-    #         print("Connection failed")
-
-    #     conn.close()
-    # except mysql.connector.Error as err:
-    #     print(f"Error: {err}")

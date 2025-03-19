@@ -4,8 +4,6 @@ from google.cloud.sql.connector import Connector
 
 import psycopg2
 from google.auth import default
-import csv
-
 
 INSTANCE_CONNECTION_NAME = 'earnest-vine-451607-f1:us-central1:test-postgres-db' 
 DB_USER = 'postgres'
@@ -57,24 +55,3 @@ def write_data_to_db(data):
 
     # Print end of function
     print("Data written to database hopefully")
-
-
-def write_csv_to_db(file_path):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    print("Connected to database")
-
-    # Use COPY command for efficient bulk insert
-    with open(file_path, 'r') as f:
-        cursor.copy_expert("COPY prem_upload (idnr, premium) FROM STDIN WITH CSV HEADER", f)
-    
-    print("Precommit")
-    # Commit the transaction
-    connection.commit()
-    
-    cursor.close()
-    connection.close()
-
-    # Print end of function
-    print("Data written to database successfully")
-
