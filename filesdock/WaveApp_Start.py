@@ -64,14 +64,19 @@ async def serve(q: Q):
     else:
         print(paths)
         for path in paths:
-            local_path = await q.site.download(path, '.')
-            print(f"File downloaded to: {local_path}", paths)
-            df = pd.read_csv(local_path)
-            print(df)
-            data = [tuple(row) for row in df.to_numpy()]
-            write_data_to_db(data)
-            print("Data written to database hopefully")
-
+            try:
+                local_path = await q.site.download(path, '.')
+                print(f"File downloaded to: {local_path}", paths)
+                
+                df = pd.read_csv(local_path)
+                print(df)
+                
+                data = [tuple(row) for row in df.to_numpy()]
+                write_data_to_db(data)
+                
+                print("Data written to database successfully")
+            except Exception as e:
+                print(f"An error occurred: {e}")
         
         # Pretty interesting trick, after uploaded, we change the page, and presumably change variable when button is clicked
         q.page['upload'] = ui.form_card(

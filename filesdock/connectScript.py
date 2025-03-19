@@ -39,13 +39,14 @@ def fetch_data_from_db():
 def write_data_to_db(data):
     connection = get_db_connection()
     cursor = connection.cursor()
+    print("Only connected")
 
     insert_query = "INSERT INTO prem_upload (idnr, premium) VALUES (%s, %s)"
 
     # Execute the insert query for each row in the data
     for row in data:
         cursor.execute(insert_query, row)
-
+    print("Precommit")
     # Commit the transaction
     connection.commit()
     
