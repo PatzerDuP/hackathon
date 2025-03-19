@@ -1,0 +1,15 @@
+h2o_wave
+
+mysql-connector-python
+
+cloud-sql-python-connector
+
+SQLAlchemy
+
+psycopg2
+
+google-auth
+
+pg8000
+
+pandas
