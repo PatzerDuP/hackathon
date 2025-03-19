@@ -76,9 +76,9 @@ async def serve(q: Q):
                 #write_chunks_to_db(local_path)
                 
                 print("Try to read csv into table")
-                load_csv_to_db(local_path)
-
-                print("Done trying")
+                #load_csv_to_db(local_path)
+                write_chunks_to_db(local_path)
+                print("Done")
             except Exception as e:
                 print(f"An error occurred: {e}")
         

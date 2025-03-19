@@ -80,7 +80,7 @@ def write_csv_to_db(file_path):
     # Print end of function
     print("Data written to database successfully")
 
-def write_chunks_to_db(file_path, batch_size=10000):
+def write_chunks_to_db(file_path, batch_size=5000):
     connection = get_db_connection()
     cursor = connection.cursor()
     print("Connected to database")
@@ -100,6 +100,7 @@ def write_chunks_to_db(file_path, batch_size=10000):
         
         if batch:
             cursor.executemany(insert_query, batch)
+            print("Run Batch")
             connection.commit()
 
     cursor.close()
