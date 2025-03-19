@@ -7,6 +7,8 @@ from google.auth import default
 
 from connectScript import fetch_data_from_db  # Import the function from db_connector.py
 
+import pandas as pd
+
 
 # Get feedback when app is started and stopped
 def on_startup():
@@ -64,6 +66,9 @@ async def serve(q: Q):
         for path in paths:
             local_path = await q.site.download(path, '.')
             print(f"File downloaded to: {local_path}", paths)
+            df = pd.read_csv(local_path)
+            print(df)
+
         
         # Pretty interesting trick, after uploaded, we change the page, and presumably change variable when button is clicked
         q.page['upload'] = ui.form_card(
