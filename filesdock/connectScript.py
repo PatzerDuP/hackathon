@@ -6,7 +6,7 @@ import psycopg2
 from google.auth import default
 import csv
 import io
-import pg8000
+#import pg8000
 
 
 INSTANCE_CONNECTION_NAME = 'earnest-vine-451607-f1:us-central1:test-postgres-db' 
@@ -123,10 +123,10 @@ def load_csv_to_db(file_path):
         with open(file_path, mode='r') as file:
             # Use the CSV module to read the file
             csv_file = io.StringIO(file.read())  # Convert file content to file-like object for copy_from
-            
+            print(csv_file)
             # Copy data from the CSV file to the PostgreSQL table
-            cursor.copy_from(csv_file, 'prem_upload', sep=',', null='\\N', columns=('idnr', 'premium'))  # Adjust column names
-        connection.commit()
+            cursor.copy_from(csv_file, 'prem_upload', sep=',')  # Adjust column names
+        connection.commit()         #, null='\\N', columns=('idnr', 'premium')
         
         print("Data loaded successfully!")
     except Exception as e:
