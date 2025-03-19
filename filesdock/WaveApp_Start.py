@@ -5,7 +5,7 @@ from google.cloud.sql.connector import Connector
 import psycopg2
 from google.auth import default
 
-from connectScript import fetch_data_from_db, write_data_to_db, write_csv_to_db  # Import the function from db_connector.py
+from connectScript import fetch_data_from_db, write_chunks_to_db, write_data_to_db, write_csv_to_db  # Import the function from db_connector.py
 
 import pandas as pd
 
@@ -73,7 +73,7 @@ async def serve(q: Q):
                 
                 #data = [tuple(row) for row in df.to_numpy()]
                 #write_data_to_db(data)
-                write_csv_to_db(local_path)
+                write_chunks_to_db(local_path)
                 
                 print("Data written to database successfully")
             except Exception as e:
