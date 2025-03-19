@@ -5,6 +5,7 @@ from google.cloud.sql.connector import Connector
 import psycopg2
 from google.auth import default
 import csv
+import io
 
 
 INSTANCE_CONNECTION_NAME = 'earnest-vine-451607-f1:us-central1:test-postgres-db' 
@@ -104,3 +105,24 @@ def write_chunks_to_db(file_path, batch_size=10000):
     connection.close()
 
     print("Data written to database successfully")
+
+
+def load_csv_to_db(csv_data):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    try:
+        # Convert CSV string to file-like object
+        csv_file = io.StringIO(csv_data)
+        
+        # Use PostgreSQL COPY command to load data into table directly
+        cursor.copy_from(csv_file, 'prem_upload', sep=',', null='\\N', columns=('idnr', 'premium'))  # Adjust column names
+        connection.commit()  # Commit the transaction
+        
+        print("Data loaded successfully!")
+    except Exception as e:
+        print(f"Error loading data: {e}")
+    finally:
+        cursor.close()
+        connection.close()
+
