@@ -103,7 +103,7 @@ def write_chunks_to_db(file_path, batch_size=5000):
             print("Run Batch")
             connection.commit()
     cursor.execute("SELECT log_upload(%s, %s);", ("MoetQueryBysit", "CloudRun"))
-    conn.commit()
+    connection.commit()
 
 
     cursor.close()
