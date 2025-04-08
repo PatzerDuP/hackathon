@@ -4,10 +4,10 @@ from google.cloud.sql.connector import Connector
 
 import psycopg2
 from google.auth import default
-
-from connectScript import fetch_data_from_db, load_csv_to_db, write_chunks_to_db, write_data_to_db, write_csv_to_db  # Import the function from db_connector.py
+from connectScript import fetch_data_from_db, write_chunks_to_db #, load_csv_to_db, write_data_to_db, write_csv_to_db  # Import the function from db_connector.py
 
 import pandas as pd
+import asyncio
 
 
 # Get feedback when app is started and stopped
@@ -58,7 +58,7 @@ async def serve(q: Q):
         q.page['upload'] = ui.form_card(
             box=ui.box('content'), 
             items=[
-            ui.text_xl('Upload dataset'),
+                ui.text_xl('Upload dataset'),
             ui.file_upload(name='dataset', label='Upload', multiple=False, file_extensions=['csv']),
         ])
     else:
