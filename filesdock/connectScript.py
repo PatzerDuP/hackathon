@@ -84,6 +84,8 @@ def write_chunks_to_db(file_path, batch_size=5000):
     connection = get_db_connection()
     cursor = connection.cursor()
     print("Connected to database")
+    cursor.execute("DELETE * FROM prem_upload;")
+    connection.commit()
 
     insert_query = "INSERT INTO prem_upload (idnr, premium) VALUES (%s, %s)"
     
