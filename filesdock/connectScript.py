@@ -84,7 +84,7 @@ def write_chunks_to_db(file_path, batch_size=5000):
     connection = get_db_connection()
     cursor = connection.cursor()
     print("Connected to database")
-    cursor.execute("DELETE * FROM prem_upload;")
+    cursor.execute("DELETE FROM prem_upload;")
     connection.commit()
 
     insert_query = "INSERT INTO prem_upload (idnr, premium) VALUES (%s, %s)"
@@ -104,9 +104,9 @@ def write_chunks_to_db(file_path, batch_size=5000):
             cursor.executemany(insert_query, batch)
             print("Run Batch")
             connection.commit()
-    cursor.execute("SELECT log_upload(%s, %s);", ("MoetQueryBysit", "CloudRun"))
-    connection.commit()
 
+    cursor.execute("SELECT log_upload(%s, %s);", ("MoetQueryBysit", "CloudRun"))    
+    connection.commit()
 
     cursor.close()
     connection.close()
