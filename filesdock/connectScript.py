@@ -39,6 +39,40 @@ def fetch_data_from_db():
     
     return data
 
+def write_chunks_to_db(file_path, batch_size=5000):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    print("Connected to database")
+    cursor.execute("DELETE FROM prem_upload;")
+    connection.commit()
+
+    insert_query = "INSERT INTO prem_upload (idnr, premium) VALUES (%s, %s)"
+    
+    with open(file_path, 'r') as f:
+        reader = csv.reader(f)
+        next(reader)  # Skip the header row
+        batch = []
+        for row in reader:
+            batch.append(row)
+            if len(batch) >= batch_size:
+                cursor.executemany(insert_query, batch)
+                connection.commit()
+                batch = []
+        
+        if batch:
+            cursor.executemany(insert_query, batch)
+            print("Run Batch")
+            connection.commit()
+
+    cursor.execute("SELECT log_upload(%s, %s);", ("MoetQueryBysit", "CloudRun"))    
+    connection.commit()
+
+    cursor.close()
+    connection.close()
+
+    print("Data written to database successfully")
+
+
 
 def write_data_to_db(data):
     connection = get_db_connection()
@@ -78,34 +112,6 @@ def write_csv_to_db(file_path):
     connection.close()
 
     # Print end of function
-    print("Data written to database successfully")
-
-def write_chunks_to_db(file_path, batch_size=5000):
-    connection = get_db_connection()
-    cursor = connection.cursor()
-    print("Connected to database")
-
-    insert_query = "INSERT INTO prem_upload (idnr, premium) VALUES (%s, %s)"
-    
-    with open(file_path, 'r') as f:
-        reader = csv.reader(f)
-        next(reader)  # Skip the header row
-        batch = []
-        for row in reader:
-            batch.append(row)
-            if len(batch) >= batch_size:
-                cursor.executemany(insert_query, batch)
-                connection.commit()
-                batch = []
-        
-        if batch:
-            cursor.executemany(insert_query, batch)
-            print("Run Batch")
-            connection.commit()
-
-    cursor.close()
-    connection.close()
-
     print("Data written to database successfully")
 
 
